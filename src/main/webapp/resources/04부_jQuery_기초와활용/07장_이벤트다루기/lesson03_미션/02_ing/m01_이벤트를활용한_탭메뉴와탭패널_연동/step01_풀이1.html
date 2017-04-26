@@ -1,0 +1,181 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title> </title>
+
+<style>
+    .tab-menu {
+    	list-style: none;
+    	height:80px;
+    }
+    
+    .tab-menu li {
+        width:99px;
+        height:40px;
+        background-position-y:0;
+        text-indent: -1000px;
+        overflow: hidden;
+        display: inline-block;
+        float:left;
+    }
+    .tab-menu li:hover {
+    	background-position-y: -40px;
+    }
+    .tab-menu li.select {
+    	background-position-y: -80px;
+    	height:80px;
+    }
+    .tab-menu li.menuitem1 {
+    	background-image: url(./images/newbtn.bar.1.png);	
+    }
+    .tab-menu li.menuitem2 {
+    	background-image: url(./images/newbtn.bar.2.png);	
+    }
+    .tab-menu li.menuitem3 {
+    	background-image: url(./images/newbtn.bar.3.png);	
+    }
+    .tab-menu li.menuitem4 {
+    	background-image: url(./images/newbtn.bar.4.png);	
+    }
+    .tab-menu li.menuitem5 {
+    	background-image: url(./images/newbtn.bar.5.png);	
+    }
+    
+    .tab-contents {
+        position:relative;
+        left:10px;
+        top:10px;
+        width:780px;
+        height:340px;
+        overflow:hidden;
+        background:url(./images/content_bg.png) no-repeat;
+    }
+    
+    .tab-contents .content{
+        position: absolute;
+        left:10px;
+        top:10px;
+        display:none;
+    }
+    
+    .tab-contents .content.select{
+        display:block;
+    }
+</style>
+ 
+<script src="../../../libs/jquery-1.11.0.min.js"></script>
+<script>
+    /*
+     * 미션01: 이벤트를 활용한 탭메뉴와 탭패널 연동
+     *
+     * step #03-03
+     *      - 방법3 : 사용자 정의 이벤트를 활용한 연동 처리
+
+     * step #03-02
+     *      - 방법2 : 콜박함수를 활용하는 방법
+     *
+     * step #03-01
+     *      - 방법1 : 탭메뉴에서 탭패널을 직접 접근하는 방법
+     * step #02
+     *      - 탭패널 구현하기
+     *
+     * step #01
+     *      - 탭메뉴 구현하기
+     *
+     */
+     var tabPanel1 = null;
+    
+    $(document).ready(function(){       
+		tabMenu("#tabMenu1");
+		
+		// 탭패널 생성
+        tabPanel1 = tabPanel(".tab-contents");
+    });
+    
+    function tabMenu(selector) {
+    	var $tabMenu = null;
+        var $selectedMenuItem = null;
+        
+	    function init() {
+	    	$tabMenu = $(selector);
+	    }
+	    
+	    function initEvent() {
+	    	$tabMenu.on("click", "li", function() {
+	    		setSelectItem($(this));
+	    	});
+	    }
+	    
+	    function setSelectItem($item) {
+			if ($selectedMenuItem) $selectedMenuItem.removeClass("select");
+			
+			$selectedMenuItem = $item;
+
+	    	$item.addClass("select");
+
+	    	//패널 활성화
+			tabPanel1.setSelectPanelAt($item.index());
+		}
+
+		init();
+		initEvent();
+	}
+
+	function tabPanel(selector) {
+		var $tabPanels = null;
+		var $selectedPanel = null;
+
+		function init() {
+			$tabPanels = $(selector).children(".content");
+		}
+
+		function setSelectPanelAt(index) {
+			if ($selectedPanel)
+				$selectedPanel.removeClass("select");
+
+			$selectedPanel = $tabPanels.eq(index);
+
+			$selectedPanel.addClass("select");
+		}
+
+		init();
+
+		return {
+			setSelectPanelAt : setSelectPanelAt
+		}
+	}
+</script>
+
+
+</head>
+	
+<body>
+    <ul class="tab-menu" id="tabMenu1">
+        <li class="menuitem1">google</li>
+        <li class="menuitem2">facebook</li>
+        <li class="menuitem3">pinterest</li>
+        <li class="menuitem4">twitter</li>
+        <li class="menuitem5">path</li>
+    </ul>
+    		
+    <div class="tab-contents">
+        <div class="content">
+            <img src="images/content_google.png">
+        </div>
+        <div class="content">
+            <img src="images/content_facebook.png">
+        </div>
+        <div class="content">
+            <img src="images/content_pinterest.png">
+        </div>
+        <div class="content">
+            <img src="images/content_twitter.png">
+        </div>
+        <div class="content">
+            <img src="images/content_path.png">
+        </div>
+    </div>
+</body>
+
+</html>
